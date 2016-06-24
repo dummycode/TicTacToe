@@ -10,17 +10,8 @@ using namespace std;
 */
 Game :: Game()
 {
+  setFirstPlayer();
   return;
-}
-
-/**
-* Get who goes first
-*
-* @return char
-*/
-char Game :: getFirstPlayer()
-{
-  return first;
 }
 
 /**
@@ -30,9 +21,9 @@ void Game :: setFirstPlayer()
 {
   srand(time(NULL));
   if(rand() % 2)
-    first = 'X';
+    setTurn('X');
   else
-    first = 'O';
+    setTurn('O');
 }
 
 /**
@@ -53,4 +44,33 @@ void Game :: move(int row, int col, char player)
   }
   std::cout << "Moved" << std::endl << std::endl;
   printState();
+}
+
+/**
+* Gets current turn
+*/
+char Game :: currentTurn()
+{
+  return turn;
+}
+
+/**
+* Set turn to a player
+*
+* @param char turn
+*/
+void Game :: setTurn(char c)
+{
+  turn = c;
+}
+
+/**
+* Update turn to other player
+*/
+void Game :: nextTurn()
+{
+  if(turn == 'X')
+    setTurn('O');
+  else
+    setTurn('X');
 }

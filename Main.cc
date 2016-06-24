@@ -9,12 +9,12 @@ int main(int argc, char *argv[])
     std::cout << "Play me in Tic Tac Toe! I'm X..." << std::endl;
 
     Game game;
-    game.setFirstPlayer();
 
-    std::cout << game.getFirstPlayer() << " goes first!" << std::endl;
+    std::cout << game.currentTurn() << " goes first!" << std::endl;
 
-    game.move(1, 2, 'X');
-    game.move(0, 0, 'O');
+    game.move(1, 2, game.currentTurn());
+    game.nextTurn();
+    game.move(0, 0, game.currentTurn());
 
     return 0;
 }

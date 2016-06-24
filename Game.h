@@ -17,13 +17,6 @@ public:
   Game();
 
   /**
-  * Get who goes first
-  *
-  * @return char
-  */
-  char getFirstPlayer();
-
-  /**
   * Set who goes first
   */
   void setFirstPlayer();
@@ -33,12 +26,17 @@ public:
   *
   * @return char
   */
-  char getTurn();
+  char currentTurn();
 
   /**
   * Set turn
   */
-  void setTurn();
+  void setTurn(char c);
+
+  /**
+  * Update turn to other player
+  */
+  void nextTurn();
 
   /**
   * Print the state of the board
