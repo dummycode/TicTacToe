@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 #include <stdlib.h>
 #include <time.h>
 #include "Game.h"
@@ -73,4 +72,9 @@ void Game :: nextTurn()
     setTurn('O');
   else
     setTurn('X');
+}
+
+Board Game :: getBoard()
+{
+  return board;
 }

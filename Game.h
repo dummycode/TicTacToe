@@ -47,6 +47,8 @@ public:
   * Player moves
   */
   void move(int row, int col, char player);
+
+  Board getBoard();
 };
 
 #endif
