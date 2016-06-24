@@ -10,8 +10,11 @@ int main(int argc, char *argv[])
 
     Game game;
     game.setFirstPlayer();
-    printf("%i", game.getState());
 
     std::cout << game.getFirstPlayer() << " goes first!" << std::endl;
+
+    game.move(1, 2, 'X');
+    game.move(0, 0, 'O');
+
     return 0;
 }

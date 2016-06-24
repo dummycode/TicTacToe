@@ -8,6 +8,7 @@ class Game
 private:
   char first;
   Board board;
+  char turn;
 
 public:
   /**
@@ -28,9 +29,26 @@ public:
   void setFirstPlayer();
 
   /**
-  * Get state of game
+  * Get current turn
+  *
+  * @return char
   */
-  int getState();
+  char getTurn();
+
+  /**
+  * Set turn
+  */
+  void setTurn();
+
+  /**
+  * Print the state of the board
+  */
+  void printState();
+
+  /**
+  * Player moves
+  */
+  void move(int row, int col, char player);
 };
 
 #endif

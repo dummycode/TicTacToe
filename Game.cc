@@ -36,9 +36,21 @@ void Game :: setFirstPlayer()
 }
 
 /**
-* Get state of game
+* Print the state
 */
-int Game :: getState()
+void Game :: printState()
 {
-  return board.getState();
+  board.printState();
+}
+
+/**
+* Player moves
+*/
+void Game :: move(int row, int col, char player)
+{
+  if (!board.move(row, col, player)) {
+    std::cout << "Spot taken! Retry..." << std::endl;
+  }
+  std::cout << "Moved" << std::endl << std::endl;
+  printState();
 }

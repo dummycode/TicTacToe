@@ -7,22 +7,37 @@ using namespace std;
 */
 Board :: Board ()
 {
-  state = 123;
-  return;
+  // Populate board
+  for(int i = 0; i < 3; i++) {
+    for(int j = 0; j < 3; j++) {
+      state[i][j] = '_';
+    }
+  }
 }
 
 /**
 * Move
 */
-void Board :: move()
+bool Board :: move(int row, int col, char player)
 {
-  printf("Moving...%i", state);
+  if (state[row][col] == '_') {
+    state[row][col] = player;
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 /**
-* Get state of board
+* Print the state of the board
 */
-int Board :: getState()
+void Board :: printState()
 {
-  return state;
+    for(int i = 0; i < 3; i++) {
+      for(int j = 0; j < 3; j++) {
+        std::cout << state[i][j] << ' ';
+      }
+      std::cout << std::endl;
+  }
 }

@@ -11,9 +11,9 @@ private:
   *                 OOX
   *                 XX0
   *
-  * @var int state
+  * @var char[][] state
   */
-  int state;
+  char state[3][3];
 public:
   /**
   * Initialize a board
@@ -21,14 +21,20 @@ public:
   Board();
 
   /**
-  * Move
+  * Player moves, returns true or false based on success
   */
-  void move();
+  bool move(int row, int col, char player);
 
   /**
   * Get state of board
   */
-  int getState();
+  char** getState();
+
+  /**
+  * Print state of board
+  */
+  void printState();
+
 };
 
 #endif
