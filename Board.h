@@ -26,14 +26,14 @@ public:
   bool move(int row, int col, char player);
 
   /**
-  * Get state of board
-  */
-  char** getState();
-
-  /**
   * Print state of board
   */
   void printState();
+
+  /**
+  * Get current state of board
+  */
+  char getState();
 
 };
 

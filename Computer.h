@@ -1,6 +1,3 @@
-#include "Board.h"
-#include "Game.h"
-
 #ifndef COMPUTER_H
 #define COMPUTER_H
 
@@ -17,7 +14,7 @@ public:
   *
   * @param char[][]
   */
-  void getTurn(char state[][]);
+  void getMove(char state);
 };
 
 #endif

@@ -48,6 +48,9 @@ public:
   */
   void move(int row, int col, char player);
 
+  /**
+  * Returns the board
+  */
   Board getBoard();
 };
 

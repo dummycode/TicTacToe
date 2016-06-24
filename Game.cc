@@ -74,6 +74,9 @@ void Game :: nextTurn()
     setTurn('X');
 }
 
+/**
+* Returns the board
+*/
 Board Game :: getBoard()
 {
   return board;

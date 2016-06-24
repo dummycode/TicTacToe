@@ -40,3 +40,11 @@ void Board :: printState()
       std::cout << std::endl;
   }
 }
+
+/**
+* Get current state
+*/
+char Board :: getState()
+{
+  return 'X';
+}

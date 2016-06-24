@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     game.move(0, 0, game.currentTurn());
 
     Computer computer;
-    computer.getTurn(game.getBoard().getState());
+    computer.getMove(game.getBoard().getState());
 
     return 0;
 }
