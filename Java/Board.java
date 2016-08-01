@@ -13,12 +13,10 @@ public class Board
 	
 	/**
 	 * Initialize a new board
-	 * 
-	 * @method Board
 	 */
 	Board() 
 	{
-		
+		// Do nothing
 	}
 	
 	/**
@@ -61,5 +59,19 @@ public class Board
 		}
 		else
 			return false;
+	}
+	
+	/**
+	 * Checks to see if board is completely filled
+	 * 
+	 * @return boolean
+	 */
+	boolean isFull() 
+	{
+		for(int i = 0; i < 3; i++)
+			for(int j = 0; j < 3; j++)
+				if(state[i][j] == '_')
+					return false;
+		return true;
 	}
 }
