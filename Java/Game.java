@@ -104,8 +104,19 @@ public class Game
 		// Get the move based on if it's the computer's or player's turn
 		if(computer.getPlayer() == turn) {
 			System.out.println("Computer.");
-//TODO			System.out.println(computer.canWin(board.getState()));
-			move = getPlayersMove(); //TODO switch back to getComputersMove
+			int[] winningMove = computer.canWin(board.getState());
+			int[] losingMove = computer.canLose(board.getState());
+			boolean canWin = winningMove != null;
+			boolean canLose = losingMove != null;
+			if(canWin) {
+				System.out.println((winningMove[1] + 1) + "," + (winningMove[0] + 1));
+				move = computer.getMove();
+			} else if(canLose) {
+				System.out.println((losingMove[1] + 1) + "," + (losingMove[0] + 1));
+				move = computer.getMove();
+			} else {
+				move = getPlayersMove(); //TODO switch back to getComputersMove
+			}
 		} else {
 			System.out.println("Player.");
 			move = getPlayersMove();
