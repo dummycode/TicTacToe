@@ -104,7 +104,9 @@ public class Game
 		// Get the move based on if it's the computer's or player's turn
 		if(computer.getPlayer() == turn) {
 			System.out.println("Computer.");
+			System.out.println("\n----Getting Computers Move---\n");
 			move = computer.getMove();
+			System.out.println(move);
 			boolean canMove = move != null;
 			if(canMove) {
 				System.out.println((move[1] + 1) + "," + (move[0] + 1));

@@ -39,16 +39,22 @@ public class Computer {
 		/**
 		 * Run through algorithm
 		 */
-		// Ask the brain if we can win? If so, do it
+		// Ask the brain if we can win. If so, do it
 		move = brain.canWin(state);
 		if(move != null)
 			return move;
 		
-		// Ask the brain if we are about to lose? If so, block it
+		// Ask the brain if we are about to lose. If so, block it
 		move = brain.canLose(state);
 		if(move != null)
 			return move;
 		
+		// Ask the brain if we can fork the opponent. If so, play the move
+		move = brain.canFork(state);
+		if(move != null) {
+			System.out.println("CAN FORK!");
+			return move;
+		}
 	
 		return move;
 	}
