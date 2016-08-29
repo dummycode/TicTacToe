@@ -398,4 +398,27 @@ public class Brain {
 
 		return null;
 	}
+	
+	/**
+	 * Checks to see if the player can fork the computer
+	 * Can the opponent create two ways to win
+	 * 
+	 * @param state
+	 * 
+	 * @return int[]
+	 */
+	int[] canGetForked(char[][] state)
+	{
+		// Temporarily reverse roles to think as player
+		computer.setPlayer(computer.getOpponent());
+		int[] playersForkingMove = this.canFork(state);
+		
+		if (playersForkingMove != null)
+			System.out.println("Player can fork!");
+
+		// Back to original roles
+		computer.setPlayer(computer.getOpponent());
+
+		return null;
+	}
 }
