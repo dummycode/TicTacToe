@@ -32,6 +32,7 @@ public class Brain {
 		 */
 		int rank = 0;
 		int[] winningMove = new int[2];
+		
 		// Rows
 		for(int row = 0; row < 3; row++) {
 			for(int i = 0; i < 3; i++) {
@@ -50,6 +51,7 @@ public class Brain {
 				return winningMove;
 			rank = 0;
 		}
+		
 		// Columns
 		for(int col = 0; col < 3; col++) {
 			for(int i = 0; i < 3; i++) {
@@ -68,6 +70,7 @@ public class Brain {
 				return winningMove;
 			rank = 0;
 		}
+		
 		// Diagonal
 		for(int i = 0; i < 3; i++) {
 			if (state[i][i] == computer.getPlayer()) {
@@ -83,9 +86,9 @@ public class Brain {
 		// If we hold 2 out of 3, and the last one is empty, we can win this shit
 		if(rank == 2)
 			return winningMove;
-		// Other diagonal
 		rank = 0;
-		// Diagonal
+		
+		// Other Diagonal
 		for(int i = 0; i < 3; i++) {
 			if (state[2-i][i] == computer.getPlayer()) {
 				rank++;;
@@ -473,12 +476,114 @@ public class Brain {
 		computer.setPlayer(computer.getOpponent());
 		int[] playersForkingMove = this.canFork(state);
 		
-		if (playersForkingMove != null)
-			System.out.println("Player can fork!");
-
 		// Back to original roles
 		computer.setPlayer(computer.getOpponent());
+		
+		// Check to see if the player can make a fork next move
+		if (playersForkingMove != null) {
+			System.out.println("Player can fork!");
+			
+			// We need to find a spot to force the player to block next move
+			int[] blockingMove = getBlockingMove(state);
+			
+			System.out.println(playersForkingMove[0] + "," + playersForkingMove[1]);
+			if (blockingMove != null)
+				System.out.println(blockingMove[0] + "," + blockingMove[1]);
+		}
 
+		return null;
+	}
+	
+	/**
+	 * Returns the move the computer needs to make to block a potential fork
+	 * 
+	 * @param state
+	 * 
+	 * @return
+	 */
+	int[] getBlockingMove(char[][] state)
+	{
+		/*
+		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
+		 */
+		int rank = 0;
+		int[] blockingMove = new int[2];
+		
+		// Rows
+		for(int row = 0; row < 3; row++) {
+			for(int i = 0; i < 3; i++) {
+				if (state[row][i] == computer.getPlayer()) {
+					rank++;;
+				} else if(state[row][i] == computer.getOpponent()) {
+					rank += 2;
+				} else {
+					// Store possible forcing move
+					blockingMove[0] = row;
+					blockingMove[1] = i;
+				}
+			}
+			// If we hold 1 out of 3, and last two are empty, we can use this to force the 
+			// player to block us, so he is unable to fork
+			if(rank == 1)
+				return blockingMove;
+			rank = 0;
+		}
+		
+		// Columns
+		for(int col = 0; col < 3; col++) {
+			for(int i = 0; i < 3; i++) {
+				if (state[i][col] == computer.getPlayer()) {
+					rank++;;
+				} else if(state[i][col] == computer.getOpponent()) {
+					rank += 2;
+				} else {
+					// Store possible forcing move
+					blockingMove[0] = i;
+					blockingMove[1] = col;
+				}
+			}
+			// If we hold 1 out of 3, and last two are empty, we can use this to force the 
+			// player to block us, so he is unable to fork
+			if(rank == 1)
+				return blockingMove;
+			rank = 0;
+		}
+		
+		// Diagonal
+		for(int i = 0; i < 3; i++) {
+			if (state[i][i] == computer.getPlayer()) {
+				rank++;;
+			} else if(state[i][i] == computer.getOpponent()) {
+				rank += 2;
+			} else {
+				// Store possible forcing move
+				blockingMove[0] = i;
+				blockingMove[1] = i;
+			}
+		}
+		// If we hold 1 out of 3, and last two are empty, we can use this to force the 
+		// player to block us, so he is unable to fork
+		if(rank == 1)
+			return blockingMove;
+		rank = 0;
+		
+		// Other diagonal
+		for(int i = 0; i < 3; i++) {
+			if (state[2-i][i] == computer.getPlayer()) {
+				rank++;;
+			} else if(state[2-i][i] == computer.getOpponent()) {
+				rank += 2;
+			} else {
+				// Store possible forcing move
+				blockingMove[0] = 2 - i;
+				blockingMove[1] = i;
+			}
+		}
+		// If we hold 1 out of 3, and last two are empty, we can use this to force the 
+		// player to block us, so he is unable to fork
+		if(rank == 1)
+			return blockingMove;
+		
 		return null;
 	}
 }
