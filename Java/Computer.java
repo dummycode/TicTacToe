@@ -55,6 +55,12 @@ public class Computer {
 			System.out.println("CAN FORK!");
 			return move;
 		}
+
+		move = brain.canGetForked(state);
+		if(move != null) {
+			System.out.println("Can get forked! Shit!");
+			return move;
+		}
 	
 		return move;
 	}
@@ -75,5 +81,15 @@ public class Computer {
 	char getOpponent()
 	{
 		return getPlayer() == 'X' ? 'O' : 'X';
+	}
+
+	/**
+	 * Sets the player of the computer
+	 *
+	 * @return char
+	 */
+	void setPlayer(char c)
+	{
+		player = c;
 	}
 }
