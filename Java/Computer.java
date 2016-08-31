@@ -56,6 +56,7 @@ public class Computer {
 			return move;
 		}
 
+		// Ask the brain if we are about to get forked. If so, block that shit
 		move = brain.canGetForked(state);
 		if(move != null) {
 			System.out.println("Can get forked! Shit!");
