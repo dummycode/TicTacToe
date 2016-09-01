@@ -618,7 +618,7 @@ public class Brain {
 	 * 
 	 * @return
 	 */
-	public int[] shouldTakeCorner(char[][] state) {
+	int[] shouldTakeCorner(char[][] state) {
 		int[] cornerMove = new int[2];
 		// Top left corner taken?
 		if(state[0][0] == computer.getOpponent() && state[2][2] == '_') {
@@ -661,21 +661,25 @@ public class Brain {
 		}
 		
 		// Otherwise take any available one
+		// Top left
 		if(state[0][0] == '_') {
 			cornerMove[0] = 0;
 			cornerMove[1] = 0;
 			return cornerMove;
 		}
+		// Top right
 		if(state[0][2] == '_') {
 			cornerMove[0] = 0;
 			cornerMove[1] = 2;
 			return cornerMove;
 		}
+		// Bottom left
 		if(state[2][0] == '_') {
 			cornerMove[0] = 2;
 			cornerMove[1] = 0;
 			return cornerMove;
 		}
+		// Bottom right
 		if(state[2][2] == '_') {
 			cornerMove[0] = 2;
 			cornerMove[1] = 2;
@@ -683,5 +687,37 @@ public class Brain {
 		}
 		
 		return null;	
+	}
+
+	/**
+	 * Logic to see if we should take a side
+	 * 
+	 * @param state
+	 * 
+	 * @return
+	 */
+	int[] shouldTakeSide(char[][] state) {
+		int[] sideMove = new int[2];
+		// Top side
+		if(state[0][1] == '_') {
+			sideMove[0] = 0;
+			sideMove[1] = 1;
+		}
+		// Left side
+		if(state[1][0] == '_') {
+			sideMove[0] = 1;
+			sideMove[1] = 0;
+		}
+		// Right side
+		if(state[1][2] == '_') {
+			sideMove[0] = 1;
+			sideMove[1] = 2;
+		}
+		// Bottom side
+		if(state[2][1] == '_') {
+			sideMove[0] = 2;
+			sideMove[1] = 1;
+		}	
+		return null;
 	}
 }

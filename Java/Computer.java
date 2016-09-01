@@ -68,6 +68,11 @@ public class Computer {
 		move = brain.shouldTakeCorner(state);
 		if(move != null)
 			return move;
+		
+		// Ask the brain if we should take a side
+		move = brain.shouldTakeSide(state);
+		if(move != null)
+			return move;
 	
 		return move;
 	}
