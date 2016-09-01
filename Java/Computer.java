@@ -63,6 +63,11 @@ public class Computer {
 		move = brain.shouldTakeCenter(state);
 		if(move != null)
 			return move;
+		
+		// Ask the brain if the player is in a corner, if they are, take opposite
+		move = brain.shouldTakeCorner(state);
+		if(move != null)
+			return move;
 	
 		return move;
 	}
