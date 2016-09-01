@@ -1,3 +1,5 @@
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Copyright 104101110114121
  */
@@ -606,5 +608,80 @@ public class Brain {
 					}
 		}
 		return null;
+	}
+
+	/**
+	 * Logic to see if we should take a corner. 
+	 * Also, take a random corner on the first move of the game
+	 * 
+	 * @param state
+	 * 
+	 * @return
+	 */
+	public int[] shouldTakeCorner(char[][] state) {
+		int[] cornerMove = new int[2];
+		// Top left corner taken?
+		if(state[0][0] == computer.getOpponent() && state[2][2] == '_') {
+			cornerMove[0] = 2;
+			cornerMove[1] = 2;
+			return cornerMove;
+		}
+		// Bottom right corner taken?
+		if(state[2][2] == computer.getOpponent() && state[0][0] == '_') {
+			cornerMove[0] = 0;
+			cornerMove[1] = 0;
+			return cornerMove;
+		}
+		// Top right corner taken?
+		if(state[0][2] == computer.getOpponent() && state[2][0] == '_') {
+			cornerMove[0] = 2;
+			cornerMove[1] = 0;
+			return cornerMove;
+		}
+		// Bottom left corner taken?
+		if(state[2][0] == computer.getOpponent() && state[0][2] == '_') {
+			cornerMove[0] = 0;
+			cornerMove[1] = 2;
+			return cornerMove;
+		}
+		
+		// If first move, take a random corne
+		boolean firstMove = true;
+		for(int i = 0; i < 3; i++)
+			for(int j = 0; j < 3; j++)
+				if(state[i][j] != '_') {
+					firstMove = false;
+				}
+		if(firstMove) {
+			int[][] firstMoves = {{0, 0}, {0,2}, {2,0}, {2, 2}}; 
+			int index = ThreadLocalRandom.current().nextInt(0, 4);
+			cornerMove[0] = firstMoves[index][0];
+			cornerMove[1] = firstMoves[index][1];
+			return cornerMove;
+		}
+		
+		// Otherwise take any available one
+		if(state[0][0] == '_') {
+			cornerMove[0] = 0;
+			cornerMove[1] = 0;
+			return cornerMove;
+		}
+		if(state[0][2] == '_') {
+			cornerMove[0] = 0;
+			cornerMove[1] = 2;
+			return cornerMove;
+		}
+		if(state[2][0] == '_') {
+			cornerMove[0] = 2;
+			cornerMove[1] = 0;
+			return cornerMove;
+		}
+		if(state[2][2] == '_') {
+			cornerMove[0] = 2;
+			cornerMove[1] = 2;
+			return cornerMove;
+		}
+		
+		return null;	
 	}
 }
