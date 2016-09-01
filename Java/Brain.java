@@ -586,4 +586,25 @@ public class Brain {
 		
 		return null;
 	}
+	
+	/**
+	 * Logic to check if center is open
+	 * We are going to take it, unless it's the first move of the game
+	 * 
+	 * @param state
+	 * 
+	 * @return
+	 */
+	int[] shouldTakeCenter(char[][] state)
+	{
+		if(state[1][1] == '_') {
+			for(int i = 0; i < 3; i++)
+				for(int j = 0; j < 3; j++)
+					if(state[i][j] != '_') {
+						int[] centerMove = {1, 1};
+						return centerMove;
+					}
+		}
+		return null;
+	}
 }
