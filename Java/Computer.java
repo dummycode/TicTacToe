@@ -51,17 +51,18 @@ public class Computer {
 		
 		// Ask the brain if we can fork the opponent. If so, play the move
 		move = brain.canFork(state);
-		if(move != null) {
-			System.out.println("CAN FORK!");
+		if(move != null)
 			return move;
-		}
 
 		// Ask the brain if we are about to get forked. If so, block that shit
 		move = brain.canGetForked(state);
-		if(move != null) {
-			System.out.println("Can get forked! Shit!");
+		if(move != null)
 			return move;
-		}
+		
+		// Ask the brain if the center is open. If it is, take it
+		move = brain.shouldTakeCenter(state);
+		if(move != null)
+			return move;
 	
 		return move;
 	}
