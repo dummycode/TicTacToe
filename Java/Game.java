@@ -144,8 +144,13 @@ public class Game
 		System.out.print("Enter move: ");
 		String move = scanner.next();
 		
-		String[] parts = move.split(",");
-		// Subtract 1 because index of array starts at 0
+		// Split the input into two parts to be parsed as integers
+                String[] parts = move.split(",");
+		
+                // Subtract 1 because index of array starts at 0 and it is more natural
+                // to have the user start at an index of 1 (less confusing for the user)
+                // Also, we reverse the order of input because it is also more natural to
+                // have the user input a spot as (x,y/column,row) rather than (y,x/row,column)
 		int column = Integer.parseInt(parts[0]) - 1;
 		int row = Integer.parseInt(parts[1]) - 1;
 		

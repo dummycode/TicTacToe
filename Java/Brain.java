@@ -483,7 +483,12 @@ public class Brain {
 		
 		// Check to see if the player can make a fork next move
 		if (playersForkingMove != null) {
-			System.out.println("Player can fork!");
+			int[][] corners = {{0, 0}, {0,2}, {2,0}, {2, 2}};
+			// If their forking move is in a corner, we must take a side in order to save our ass
+			for(int i = 0; i < 4; i++) {
+				if(playersForkingMove[0] == corners[i][0] && playersForkingMove[1] == corners[i][1])
+					return shouldTakeSide(state);
+			}
 			
 			// We need to find a spot to force the player to block next move
 			int[] blockingMove = getBlockingMove(state);
@@ -718,6 +723,6 @@ public class Brain {
 			sideMove[0] = 2;
 			sideMove[1] = 1;
 		}	
-		return null;
+		return sideMove;
 	}
 }
