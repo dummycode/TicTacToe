@@ -625,6 +625,7 @@ public class Brain {
 	 */
 	int[] shouldTakeCorner(char[][] state) {
 		int[] cornerMove = new int[2];
+		// If the opponent has any corner, best to take the opposite one
 		// Top left corner taken?
 		if(state[0][0] == computer.getOpponent() && state[2][2] == '_') {
 			cornerMove[0] = 2;
@@ -650,48 +651,19 @@ public class Brain {
 			return cornerMove;
 		}
 		
-		// If first move, take a random corne
-		boolean firstMove = true;
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				if(state[i][j] != '_') {
-					firstMove = false;
-				}
-		if(firstMove) {
-			int[][] firstMoves = {{0, 0}, {0,2}, {2,0}, {2, 2}}; 
+		// If all taken, break
+		if(state[0][0] != '_' && state[0][2] != '_' && state[2][0] != '_' && state[2][2] != '_')
+			return null;
+		
+		// Take a random corner
+		int[][] corners = {{0,0}, {0,2}, {2,0}, {2,2}}; 
+		while(true) {
 			int index = ThreadLocalRandom.current().nextInt(0, 4);
-			cornerMove[0] = firstMoves[index][0];
-			cornerMove[1] = firstMoves[index][1];
-			return cornerMove;
+			cornerMove[0] = corners[index][0];
+			cornerMove[1] = corners[index][1];
+			if(state[corners[index][0]][corners[index][1]] == '_')
+				return cornerMove;
 		}
-		
-		// Otherwise take any available one
-		// Top left
-		if(state[0][0] == '_') {
-			cornerMove[0] = 0;
-			cornerMove[1] = 0;
-			return cornerMove;
-		}
-		// Top right
-		if(state[0][2] == '_') {
-			cornerMove[0] = 0;
-			cornerMove[1] = 2;
-			return cornerMove;
-		}
-		// Bottom left
-		if(state[2][0] == '_') {
-			cornerMove[0] = 2;
-			cornerMove[1] = 0;
-			return cornerMove;
-		}
-		// Bottom right
-		if(state[2][2] == '_') {
-			cornerMove[0] = 2;
-			cornerMove[1] = 2;
-			return cornerMove;
-		}
-		
-		return null;	
 	}
 
 	/**
@@ -703,26 +675,19 @@ public class Brain {
 	 */
 	int[] shouldTakeSide(char[][] state) {
 		int[] sideMove = new int[2];
-		// Top side
-		if(state[0][1] == '_') {
-			sideMove[0] = 0;
-			sideMove[1] = 1;
+		
+		// If all taken, break
+		if(state[1][0] != '_' && state[0][1] != '_' && state[1][2] != '_' && state[2][1] != '_')
+			return null;
+		
+		// Take a random side
+		int[][] sides = {{1,0}, {0,1}, {1,2}, {2,1}}; 
+		while(true) {
+			int index = ThreadLocalRandom.current().nextInt(0, 4);
+			sideMove[0] = sides[index][0];
+			sideMove[1] = sides[index][1];
+			if(state[sides[index][0]][sides[index][1]] == '_')
+				return sideMove;
 		}
-		// Left side
-		if(state[1][0] == '_') {
-			sideMove[0] = 1;
-			sideMove[1] = 0;
-		}
-		// Right side
-		if(state[1][2] == '_') {
-			sideMove[0] = 1;
-			sideMove[1] = 2;
-		}
-		// Bottom side
-		if(state[2][1] == '_') {
-			sideMove[0] = 2;
-			sideMove[1] = 1;
-		}	
-		return sideMove;
 	}
 }
