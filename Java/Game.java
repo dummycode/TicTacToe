@@ -106,20 +106,18 @@ public class Game
 			System.out.println("Computer.");
 			System.out.println("\n----Getting Computers Move---\n");
 			move = computer.getMove();
-			System.out.println(move);
-			boolean canMove = move != null;
-			if(canMove) {
-				System.out.println((move[1] + 1) + "," + (move[0] + 1));
-				move = computer.getMove();
-			} else {
-				move = getPlayersMove(); //TODO switch back to getComputersMove
-			}
 		} else {
 			System.out.println("Player.");
 			move = getPlayersMove();
 		}
 		// Make the move, store response
 		boolean goodMove = move(move[0], move[1]);
+		
+		// If not valid move and the computer made it, break!
+		if(!goodMove && this.getTurn() == this.computer.getPlayer()) {
+			System.out.println("Something broke!");
+			System.exit(0);
+		}
 		
 		// If it was a good move, check winner and set next turn
 		if(goodMove) {
