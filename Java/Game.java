@@ -1,8 +1,10 @@
 /**
  * Copyright 104101110114121
  */
+
 import java.util.Random;
 import java.util.Scanner;
+
 /**
  * Class Game
  * 
