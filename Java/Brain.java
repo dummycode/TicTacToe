@@ -1,8 +1,8 @@
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * Copyright 104101110114121
  */
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Class Brain
