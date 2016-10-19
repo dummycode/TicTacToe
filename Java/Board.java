@@ -30,16 +30,19 @@ public class Board
 	}
 	
 	/**
-	 * Print the state of the board
+	 * Convert Board object to string
 	 */
-	void printState()
+	public String toString()
 	{
+		String board = "";
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {
-				System.out.print(state[i][j] + " ");
+				board += " " + (state[i][j] == '_' ? " " : state[i][j]) + " " + (j == 2 ? "" : "|"); 
 			}
-			System.out.println("\n");
+			if (i < 2)
+				board += "\n_ _ _ _ _ _\n";
 		}
+		return board;
 	}
 	
 	/**

@@ -12,13 +12,13 @@ import java.util.Scanner;
  */
 public class Game 
 {
-	Board board;
-	char turn;
-	String status;
-	Computer computer;
-	Scanner scanner;
-	GameStatus gameStatus;
-	char winner;
+	private Board board;
+	private char turn;
+	private String status;
+	private Computer computer;
+	private Scanner scanner;
+	private GameStatus gameStatus;
+	private char winner;
 	
 	/**
 	 * Initialize a new game
@@ -58,7 +58,7 @@ public class Game
 	 */
 	void printState()
 	{
-		board.printState();
+		System.out.println(board);
 	}
 	
 	/**
@@ -138,19 +138,18 @@ public class Game
 	/**
 	 * Gets the player's move
 	 */
-	//TODO add bad input handling and bad ranges
 	int[] getPlayersMove()
 	{
 		System.out.print("Enter move: ");
 		String move = scanner.next();
 		
 		// Split the input into two parts to be parsed as integers
-                String[] parts = move.split(",");
+        String[] parts = move.split(",");
 		
-                // Subtract 1 because index of array starts at 0 and it is more natural
-                // to have the user start at an index of 1 (less confusing for the user)
-                // Also, we reverse the order of input because it is also more natural to
-                // have the user input a spot as (x,y/column,row) rather than (y,x/row,column)
+        // Subtract 1 because index of array starts at 0 and it is more natural
+        // to have the user start at an index of 1 (less confusing for the user)
+        // Also, we reverse the order of input because it is also more natural to
+        // have the user input a spot as (x,y/column,row) rather than (y,x/row,column)
 		int column = Integer.parseInt(parts[0]) - 1;
 		int row = Integer.parseInt(parts[1]) - 1;
 		
@@ -171,6 +170,7 @@ public class Game
 	}
 	
 	/**
+	 * Check to see if the game is over
 	 * 
 	 * @param lastMove (passed as row, column)
 	 * 
@@ -178,8 +178,6 @@ public class Game
 	 */
 	boolean isOver(int[] lastMove) {
 		char state[][] = board.getState();
-//		if(state[0][0] != '_')
-//			return true;
 		
 		// Check if column is a 3 in a row
 		if(state[0][lastMove[1]] == this.turn &&
@@ -208,6 +206,9 @@ public class Game
 		return false;
 	}
 	
+	/**
+	 * Check to see if game is drawn
+	 */
 	boolean isDraw() {
 		// If the board is full, it's a draw
 		return board.isFull();
