@@ -1,243 +1,188 @@
-/**
- * Copyright 104101110114121
- */
-
 import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Class Game
- * 
- * @author Henry Harris <henry@104101110114121.com>
+ * @author Henry Harris
  */
-public class Game 
-{
-	private Board board;
-	private char turn;
-	private String status;
-	private Computer computer;
-	private Scanner scanner;
-	private GameStatus gameStatus;
-	private char winner;
-	
-	/**
-	 * Initialize a new game
-	 */
-	Game() 
-	{
-		board = new Board();
-		computer = new Computer('X', this);
-		gameStatus = new GameStatus();
-		scanner = new Scanner(System.in);
-		setFirstTurn();
-		status = gameStatus.IN_PROGRESS;
-		winner = '_';
-	}
-	
-	/**
-	 * Set the first turn randomly
-	 */
-	void setFirstTurn()
-	{
-		Random r = new Random();
-		turn = r.nextBoolean() ? 'X' : 'O';
-	}
-	
-	/**
-	 * Get current turn
-	 * 
-	 * @return char
-	 */
-	char getTurn()
-	{
-		return turn;
-	}
-	
-	/**
-	 * Print the state of the game
-	 */
-	void printState()
-	{
-		System.out.println(board);
-	}
-	
-	/**
-	 * Move current player to given position
-	 * 
-	 * @param row
-	 * @param column
-	 */
-	boolean move(int row, int col)
-	{	
-		if(row > 2 || row < 0 || col > 2 || col < 0) {
-			System.out.println("Error! Invalid spot.");
-			return false;
-		}
-		else {
-			if(board.move(getTurn(), row, col)) {
-				System.out.println("Moved.");
-				return true;
-			}
-			else {
-				System.out.println("Spot taken! Try again...");
-				return false;
-			}
-		}
-	}
-	
-	/**
-	 * Change turn to next player
-	 */
-	void nextTurn() 
-	{
-		if(turn == 'X')
-			turn = 'O';
-		else
-			turn = 'X';
-				
-	}
-	
-	/**
-	 * Get general move, route to player or computer
-	 */
-	void getMove() 
-	{
-		int[] move;
-		// Get the move based on if it's the computer's or player's turn
-		if(computer.getPlayer() == turn) {
-			System.out.println("Computer.");
-			System.out.println("\n----Getting Computers Move---\n");
-			move = computer.getMove();
-		} else {
-			System.out.println("Player.");
-			move = getPlayersMove();
-		}
-		// Make the move, store response
-		boolean goodMove = move(move[0], move[1]);
-		
-		// If not valid move and the computer made it, break!
-		if(!goodMove && this.getTurn() == this.computer.getPlayer()) {
-			System.out.println("Something broke!");
-			System.exit(0);
-		}
-		
-		// If it was a good move, check winner and set next turn
-		if(goodMove) {
-			if(isOver(move)) {
-				this.winner = getTurn();
-				this.status = gameStatus.OVER;
-			}
-			if(isDraw()) {
-				this.status = gameStatus.OVER;
-			}
-				
-			nextTurn();
-		}
-	}
-	
-	/**
-	 * Gets the player's move
-	 */
-	int[] getPlayersMove()
-	{
-		System.out.print("Enter move: ");
-		String move = scanner.next();
-		
-		// Split the input into two parts to be parsed as integers
-        String[] parts = move.split(",");
-		
-        // Subtract 1 because index of array starts at 0 and it is more natural
-        // to have the user start at an index of 1 (less confusing for the user)
-        // Also, we reverse the order of input because it is also more natural to
-        // have the user input a spot as (x,y/column,row) rather than (y,x/row,column)
-		int column = Integer.parseInt(parts[0]) - 1;
-		int row = Integer.parseInt(parts[1]) - 1;
-		
-		int[] array = {row, column};
-		return array;
-	}
-	
-	/**
-	 * Gets the computer's move
-	 */
-	int[] getComputersMove()
-	{
-		return computer.getMove();
-	}
+public class Game {
+    private final Board board;
+    private final Computer computer;
+    private char turn;
+    private char winner = '_';
+    private GameStatus status;
+    
+    /**
+     * Game constructor
+     */
+    public Game() 
+    {
+        board = new Board();
+        computer = new Computer('X');
+        
+        turn = whoGoesFirst();
+        status = GameStatus.IN_PROGRESS;
+    }
+    
+    /**
+     * Get a move
+     */
+    public void getMove()
+    {
+        int[] move = new int[2];
+        
+        if (turn == computer.getPlayer()) {
+            move = computer.getMove(board.getState());
+        } else {
+            move = getHumanMove();
+        }
+    
+        boolean goodMove = move(move[0], move[1]);
+        
+        if (!goodMove && turn == computer.getPlayer()) {
+            System.out.println("Something broke and the computer made a bad move.");
+            status = GameStatus.BROKEN;
+        } 
+        
+        if (goodMove) {
+            if (isOver(move)) {
+                winner = turn;
+                status = GameStatus.OVER;
+            } 
+            if (isDraw()) {
+                status = GameStatus.OVER;
+            }
+            nextTurn();
+        }
+    }
+    
+    /**
+     * Print the current state of the game
+     */
+    public void printState() 
+    {
+        System.out.println(board);
+    }
+    
+    /**
+     * Get the current status of the game
+     * 
+     * @return 
+     */
+    public GameStatus getStatus() 
+    {
+        return status;
+    }
+    
+    /**
+     * Get the winner
 
-	String getStatus() {
-		return status;
-	}
-	
-	/**
-	 * Check to see if the game is over
-	 * 
-	 * @param lastMove (passed as row, column)
-	 * 
-	 * @return
-	 */
-	boolean isOver(int[] lastMove) {
-		char state[][] = board.getState();
-		
-		// Check if column is a 3 in a row
-		if(state[0][lastMove[1]] == this.turn &&
-				state[1][lastMove[1]] == this.turn &&
-				state[2][lastMove[1]] == this.turn)
-			return true;
-		// Check if row is a 3 in a row
-		if(state[lastMove[0]][0] == this.turn &&
-				state[lastMove[0]][1] == this.turn &&
-				state[lastMove[0]][2] == this.turn)
-			return true;
-		// Check if 3 in a row in diagonal
-		if(lastMove[0] == lastMove[1] &&
-				state[0][0] == this.turn &&
-				state[1][1] == this.turn &&
-				state[2][2] == this.turn)
-			return true;
-		// Check if 3 in a row in other diagonal
-		if(lastMove[0] + lastMove[1] == 2 &&
-				state[2][0] == this.turn &&
-				state[1][1] == this.turn &&
-				state[0][2] == this.turn)
-			return true;
-		
-		// No winner
-		return false;
-	}
-	
-	/**
-	 * Check to see if game is drawn
-	 */
-	boolean isDraw() {
-		// If the board is full, it's a draw
-		return board.isFull();
-	}
-	
-	/**
-	 * This method gets the winner of the game
-	 * If called and the game isn't over, it throws an exception, because there is no winner
-	 * 
-	 * @throws Exception
-	 * 
-	 * @return char 
-	 */
-	char getWinner() throws Exception {
-		// The game isn't over... something broke
-		if(this.status != gameStatus.OVER) {
-			throw new Exception();
-		}
-		return this.winner;
-	}
-	
-	/**
-	 * Returns the board of the game
-	 * 
-	 * @return Board
-	 */
-	Board getBoard()
-	{
-		return this.board;
-	}
-	
+     * @return 
+     */
+    public char getWinner() 
+    {
+        return winner;
+    }
+    
+    private boolean move(int row, int col) 
+    {
+        if (row > 2 || row < 0 || col > 2 || col < 0) {
+            System.out.println("Error! Invalid spot.");
+        } else {
+            if (board.move(turn, row, col)) {
+                System.out.println("Moved.");
+                return true;
+            } else {
+                System.out.println("Spot taken! Try again.");
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get who goes first
+     */
+    private char whoGoesFirst() 
+    {
+        Random r = new Random();
+        return r.nextBoolean() ? 'X' : 'O';
+    }
+    
+    /**
+     * Set next turn
+     */
+    private void nextTurn() 
+    {
+        turn = (turn == 'X') ? 'O' : 'X';
+    }
+    
+    /**
+     * Get human move
+     * 
+     * @return
+     */
+    private int[] getHumanMove() {
+        int move[] = new int[2];
+        System.out.print("Enter move (x, y): ");
+        try {
+            Scanner scanner = new Scanner(System.in);
+            String[] parts = scanner.next().split(",");
+
+            int col = Integer.parseInt(parts[0]) - 1;
+            int row = Integer.parseInt(parts[1]) - 1;
+
+            move[0] = row;
+            move[1] = col;
+        } catch (Exception e) {
+            System.out.println("Invalid move syntax! Use (x, y) where x and y are 1..3");
+            return getHumanMove();
+        }
+        return move;
+    }
+    
+    /**
+     * Check if the game is over
+     * 
+     * @param lastMove
+     * 
+     * @return 
+     */
+    private boolean isOver(int[] lastMove) 
+    {
+        char state[][] = board.getState();
+
+        // Check if column is a 3 in a row
+        if (state[0][lastMove[1]] == turn 
+                && state[1][lastMove[1]] == turn 
+                && state[2][lastMove[1]] == turn) {
+            return true;
+        }
+        // Check if row is a 3 in a row
+        if (state[lastMove[0]][0] == turn 
+                && state[lastMove[0]][1] == turn 
+                && state[lastMove[0]][2] == turn) {
+            return true;
+        }
+        // Check if 3 in a row in diagonal
+        if (lastMove[0] == lastMove[1] 
+                && state[0][0] == turn 
+                && state[1][1] == turn 
+                && state[2][2] == turn) {
+            return true;
+        }
+        // Check if 3 in a row in other diagonal
+        return lastMove[0] + lastMove[1] == 2 
+                && state[2][0] == turn 
+                && state[1][1] == turn 
+                && state[0][2] == turn;
+    }
+    
+    /**
+     * Check to see if the game is a draw
+     * 
+     * @return 
+     */
+    private boolean isDraw() 
+    {
+        return board.isFull();
+    }
 }

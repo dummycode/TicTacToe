@@ -1,693 +1,204 @@
-/**
- * Copyright 104101110114121
- */
-
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 /**
- * Class Brain
- * 
- * @author Henry Harris <henry@104101110114121.com>
+ * @author henry
  */
-public class Brain {
-	Computer computer;
-	
-	/**
-	 * Initialize a new brain for a computer
-	 */
-	Brain(Computer computer) 
-	{
-		this.computer = computer;
-	}
-	
-	/**
-	 * Brain logic to check to see if a computer can win
-	 * 
-	 * @param char[][]
-	 * 
-	 * @return boolean
-	 */
-	int[] canWin(char[][] state)
-	{
-		/*
-		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
-		 */
-		int rank = 0;
-		int[] winningMove = new int[2];
-		
-		// Rows
-		for(int row = 0; row < 3; row++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[row][i] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[row][i] == computer.getOpponent()) {
-					rank--;
-				} else {
-					// Store possible winning move
-					winningMove[0] = row;
-					winningMove[1] = i;
-				}
-			}
-			// If we hold 2 out of 3, and last one is empty, we can win this shit
-			if(rank == 2)
-				return winningMove;
-			rank = 0;
-		}
-		
-		// Columns
-		for(int col = 0; col < 3; col++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[i][col] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[i][col] == computer.getOpponent()) {
-					rank--;
-				} else {
-					// Store possible winning move
-					winningMove[0] = i;
-					winningMove[1] = col;
-				}
-			}
-			// If we hold 2 out of 3, and last one is empty, we can win this shit
-			if(rank == 2)
-				return winningMove;
-			rank = 0;
-		}
-		
-		// Diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[i][i] == computer.getOpponent()) {
-				rank--;
-			} else {
-				// Store possible winning move
-				winningMove[0] = i;
-				winningMove[1] = i;
-			}
-		}
-		// If we hold 2 out of 3, and the last one is empty, we can win this shit
-		if(rank == 2)
-			return winningMove;
-		rank = 0;
-		
-		// Other Diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[2-i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[2-i][i] == computer.getOpponent()) {
-				rank--;
-			} else {
-				// Store possible winning move
-				winningMove[0] = 2 - i;
-				winningMove[1] = i;
-			}
-		}
-		// If we hold 2 out of 3, and the last one is empty, we can win this shit
-		if(rank == 2)
-			return winningMove;
-		
-		return null;
-	}
-	
-	/**
-	 * Checks to see if the computer is about to lose
-	 * 
-	 * @param char[][]
-	 * 
-	 * @return boolean
-	 */
-	int[] canLose(char[][] state)
-	{
-		/*
-		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
-		 */
-		int rank = 0;
-		int[] savingMove = new int[2];
-		// Rows
-		for(int row = 0; row < 3; row++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[row][i] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[row][i] == computer.getOpponent()) {
-					rank--;
-				} else {
-					// Store possible winning move
-					savingMove[0] = row;
-					savingMove[1] = i;
-				}
-			}
-			// If they hold 2 out of 3, and the last one is empty, we gotta block em
-			if(rank == -2)
-				return savingMove;
-			rank = 0;
-		}
-		// Columns
-		for(int col = 0; col < 3; col++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[i][col] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[i][col] == computer.getOpponent()) {
-					rank--;
-				} else {
-					// Store possible winning move
-					savingMove[0] = i;
-					savingMove[1] = col;
-				}
-			}
-			// If they hold 2 out of 3, and the last one is empty, we gotta block em
-			if(rank == -2)
-				return savingMove;
-			rank = 0;
-		}
-		// Diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[i][i] == computer.getOpponent()) {
-				rank--;
-			} else {
-				// Store possible winning move
-				savingMove[0] = i;
-				savingMove[1] = i;
-			}
-		}
-		// If they hold 2 out of 3, and the last one is empty, we gotta block em
-		if(rank == -2)
-			return savingMove;
-		// Other diagonal
-		rank = 0;
-		// Diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[2-i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[2-i][i] == computer.getOpponent()) {
-				rank--;
-			} else {
-				// Store possible winning move
-				savingMove[0] = 2 - i;
-				savingMove[1] = i;
-			}
-		}
-		// If they hold 2 out of 3, and the last one is empty, we gotta block em
-		if(rank == -2)
-			return savingMove;
-		
-		return null;
-	}
-	
-	/**
-	 * Checks to see if the computer can fork the opponent
-	 * Can create two ways to win
-	 * 
-	 * @param state
-	 * 
-	 * @return int[]
-	 */
-	int[] canFork(char[][] state)
-	{
-		char[][] tempState = new char[3][3];
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				tempState[i][j] = state[i][j];
-
-		// If top left is open, possible forking spot!
-		if(state[0][0] == '_') {
-			int[] forkingMove = new int[2];
-			int rank = 0;
-			int forks = 0;
-			// Take it
-			tempState[0][0] = computer.getPlayer();
-			// Can now win the row?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[0][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[0][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the column?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][0] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][0] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			
-			if(forks >= 2) {
-				forkingMove[0] = 0;
-				forkingMove[1] = 0;
-				return forkingMove;
-			}
-		}
-		
-		tempState = new char[3][3];
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				tempState[i][j] = state[i][j];
-
-		// If top right is open, possible forking spot!
-		if(state[0][2] == '_') {
-			int[] forkingMove = new int[2];
-			int rank = 0;
-			int forks = 0;
-			// Take it
-			tempState[0][2] = computer.getPlayer();
-			// Can now win the row?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[0][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[0][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the column?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][2] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][2] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][2 - i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][2 - i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			
-			if(forks >= 2) {
-				forkingMove[0] = 0;
-				forkingMove[1] = 2;
-				return forkingMove;
-			}
-		}
-		
-		tempState = new char[3][3];
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				tempState[i][j] = state[i][j];
-
-		// If bottom left is open, possible forking spot!
-		if(state[2][0] == '_') {
-			int[] forkingMove = new int[2];
-			int rank = 0;
-			int forks = 0;
-			// Take it
-			tempState[2][0] = computer.getPlayer();
-			// Can now win the row?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[2][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[2][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the column?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][0] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][0] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][2 - i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][2 - i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			
-			if(forks >= 2) {
-				forkingMove[0] = 2;
-				forkingMove[1] = 0;
-				return forkingMove;
-			}
-		}
-		
-		tempState = new char[3][3];
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				tempState[i][j] = state[i][j];
-
-		// If bottom right is open, possible forking spot!
-		if(state[2][2] == '_') {
-			int[] forkingMove = new int[2];
-			int rank = 0;
-			int forks = 0;
-			// Take it
-			tempState[2][2] = computer.getPlayer();
-			// Can now win the row?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[2][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[2][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the column?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][2] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][2] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			
-			if(forks >= 2) {
-				forkingMove[0] = 2;
-				forkingMove[1] = 0;
-				return forkingMove;
-			}
-		}
-		
-		// TODO add middle square as a possible forking spot
-		tempState = new char[3][3];
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				tempState[i][j] = state[i][j];
-
-		// If middle is open, possible forking spot!
-		if(state[1][1] == '_') {
-			int[] forkingMove = new int[2];
-			int rank = 0;
-			int forks = 0;
-			// Take it
-			tempState[1][1] = computer.getPlayer();
-			// Can now win the row?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[1][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[1][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the column?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][1] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][1] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			rank = 0;
-			// Can now win the other diagonal?
-			for(int i = 0; i < 3; i++) {
-				if(tempState[i][2 - i] == computer.getPlayer())
-					rank++;
-				else if(tempState[i][2 - i] == computer.getOpponent())
-					rank--;
-			}
-			if(rank == 2)
-				forks++;
-			
-			if(forks >= 2) {
-				forkingMove[0] = 1;
-				forkingMove[1] = 1;
-				return forkingMove;
-			}
-		}
-
-		return null;
-	}
-	
-	/**
-	 * Checks to see if the player can fork the computer
-	 * Can the opponent create two ways to win
-	 * 
-	 * @param state
-	 * 
-	 * @return int[]
-	 */
-	int[] canGetForked(char[][] state)
-	{
-		// Temporarily reverse roles to think as player
-		computer.setPlayer(computer.getOpponent());
-		int[] playersForkingMove = this.canFork(state);
-		
-		// Back to original roles
-		computer.setPlayer(computer.getOpponent());
-		
-		// Check to see if the player can make a fork next move
-		if (playersForkingMove != null) {
-			int[][] corners = {{0, 0}, {0,2}, {2,0}, {2, 2}};
-			// If their forking move is in a corner, we must take a side in order to save our ass
-			for(int i = 0; i < 4; i++) {
-				if(playersForkingMove[0] == corners[i][0] && playersForkingMove[1] == corners[i][1])
-					return shouldTakeSide(state);
-			}
-			
-			// We need to find a spot to force the player to block next move
-			int[] blockingMove = getBlockingMove(state);
-			
-			System.out.println(playersForkingMove[0] + "," + playersForkingMove[1]);
-			if (blockingMove != null)
-				System.out.println(blockingMove[0] + "," + blockingMove[1]);
-		}
-
-		return null;
-	}
-	
-	/**
-	 * Returns the move the computer needs to make to block a potential fork
-	 * 
-	 * @param state
-	 * 
-	 * @return
-	 */
-	int[] getBlockingMove(char[][] state)
-	{
-		/*
-		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
-		 */
-		int rank = 0;
-		int[] blockingMove = new int[2];
-		
-		// Rows
-		for(int row = 0; row < 3; row++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[row][i] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[row][i] == computer.getOpponent()) {
-					rank += 2;
-				} else {
-					// Store possible forcing move
-					blockingMove[0] = row;
-					blockingMove[1] = i;
-				}
-			}
-			// If we hold 1 out of 3, and last two are empty, we can use this to force the 
-			// player to block us, so he is unable to fork
-			if(rank == 1)
-				return blockingMove;
-			rank = 0;
-		}
-		
-		// Columns
-		for(int col = 0; col < 3; col++) {
-			for(int i = 0; i < 3; i++) {
-				if (state[i][col] == computer.getPlayer()) {
-					rank++;;
-				} else if(state[i][col] == computer.getOpponent()) {
-					rank += 2;
-				} else {
-					// Store possible forcing move
-					blockingMove[0] = i;
-					blockingMove[1] = col;
-				}
-			}
-			// If we hold 1 out of 3, and last two are empty, we can use this to force the 
-			// player to block us, so he is unable to fork
-			if(rank == 1)
-				return blockingMove;
-			rank = 0;
-		}
-		
-		// Diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[i][i] == computer.getOpponent()) {
-				rank += 2;
-			} else {
-				// Store possible forcing move
-				blockingMove[0] = i;
-				blockingMove[1] = i;
-			}
-		}
-		// If we hold 1 out of 3, and last two are empty, we can use this to force the 
-		// player to block us, so he is unable to fork
-		if(rank == 1)
-			return blockingMove;
-		rank = 0;
-		
-		// Other diagonal
-		for(int i = 0; i < 3; i++) {
-			if (state[2-i][i] == computer.getPlayer()) {
-				rank++;;
-			} else if(state[2-i][i] == computer.getOpponent()) {
-				rank += 2;
-			} else {
-				// Store possible forcing move
-				blockingMove[0] = 2 - i;
-				blockingMove[1] = i;
-			}
-		}
-		// If we hold 1 out of 3, and last two are empty, we can use this to force the 
-		// player to block us, so he is unable to fork
-		if(rank == 1)
-			return blockingMove;
-		
-		return null;
-	}
-	
-	/**
-	 * Logic to check if center is open
-	 * We are going to take it, unless it's the first move of the game
-	 * 
-	 * @param state
-	 * 
-	 * @return
-	 */
-	int[] shouldTakeCenter(char[][] state)
-	{
-		if(state[1][1] == '_') {
-			for(int i = 0; i < 3; i++)
-				for(int j = 0; j < 3; j++)
-					if(state[i][j] != '_') {
-						int[] centerMove = {1, 1};
-						return centerMove;
-					}
-		}
-		return null;
-	}
-
-	/**
-	 * Logic to see if we should take a corner. 
-	 * Also, take a random corner on the first move of the game
-	 * 
-	 * @param state
-	 * 
-	 * @return
-	 */
-	int[] shouldTakeCorner(char[][] state) {
-		int[] cornerMove = new int[2];
-		// If the opponent has any corner, best to take the opposite one
-		// Top left corner taken?
-		if(state[0][0] == computer.getOpponent() && state[2][2] == '_') {
-			cornerMove[0] = 2;
-			cornerMove[1] = 2;
-			return cornerMove;
-		}
-		// Bottom right corner taken?
-		if(state[2][2] == computer.getOpponent() && state[0][0] == '_') {
-			cornerMove[0] = 0;
-			cornerMove[1] = 0;
-			return cornerMove;
-		}
-		// Top right corner taken?
-		if(state[0][2] == computer.getOpponent() && state[2][0] == '_') {
-			cornerMove[0] = 2;
-			cornerMove[1] = 0;
-			return cornerMove;
-		}
-		// Bottom left corner taken?
-		if(state[2][0] == computer.getOpponent() && state[0][2] == '_') {
-			cornerMove[0] = 0;
-			cornerMove[1] = 2;
-			return cornerMove;
-		}
-		
-		// If all taken, break
-		if(state[0][0] != '_' && state[0][2] != '_' && state[2][0] != '_' && state[2][2] != '_')
-			return null;
-		
-		// Take a random corner
-		int[][] corners = {{0,0}, {0,2}, {2,0}, {2,2}}; 
-		while(true) {
-			int index = ThreadLocalRandom.current().nextInt(0, 4);
-			cornerMove[0] = corners[index][0];
-			cornerMove[1] = corners[index][1];
-			if(state[corners[index][0]][corners[index][1]] == '_')
-				return cornerMove;
-		}
-	}
-
-	/**
-	 * Logic to see if we should take a side
-	 * 
-	 * @param state
-	 * 
-	 * @return
-	 */
-	int[] shouldTakeSide(char[][] state) {
-		int[] sideMove = new int[2];
-		
-		// If all taken, break
-		if(state[1][0] != '_' && state[0][1] != '_' && state[1][2] != '_' && state[2][1] != '_')
-			return null;
-		
-		// Take a random side
-		int[][] sides = {{1,0}, {0,1}, {1,2}, {2,1}}; 
-		while(true) {
-			int index = ThreadLocalRandom.current().nextInt(0, 4);
-			sideMove[0] = sides[index][0];
-			sideMove[1] = sides[index][1];
-			if(state[sides[index][0]][sides[index][1]] == '_')
-				return sideMove;
-		}
-	}
+public class Brain 
+{   
+    // Computer the Brain represents
+    final private Computer computer;
+    final private Random random = new Random();
+    
+    /**
+     * Constructor
+     * 
+     * @param computer 
+     */
+    public Brain(Computer computer) {
+        this.computer = computer;
+    }
+    
+    /**
+     * Get the best move given a state
+     * 
+     * @param state
+     * 
+     * @return 
+     */
+    public int[] getMove(char[][] state) {
+        int[] bestMove = {-1, -1};
+        int[][] bestMoves = new int[0][2];
+        int bestVal = -1000;
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // Is cell empty?
+                if (state[i][j] == '_') {
+                    state[i][j] = computer.getPlayer();
+                    
+                    // Compute eval for this move
+                    int moveVal = minimax(state, 0, false);
+                    
+                    state[i][j] = '_';
+                
+                    // If even, save it to list of best moves
+                    if (moveVal == bestVal) {
+                        int[][] temp = new int[bestMoves.length + 1][2];
+                        for (int x = 0; x < bestMoves.length; x++) {
+                            for (int y = 0; y < 2; y++) {
+                                temp[x][y] = bestMoves[x][y];
+                            }
+                        }
+                        temp[bestMoves.length][0] = i;
+                        temp[bestMoves.length][1] = j;
+                        bestMoves = temp;
+                    }
+                    // If better best, it's the new best!
+                    if (moveVal > bestVal) {
+                        bestMove[0] = i;
+                        bestMove[1] = j;
+                        bestVal = moveVal;
+                        
+                        bestMoves = new int[1][2];
+                        bestMoves[0][0] = i;
+                        bestMoves[0][1] = j;
+                    }
+                }
+            }
+        }
+        // If more than one, get one at random
+        if (bestMoves.length > 1) {
+            int randomIndex = random.nextInt(bestMoves.length - 1);
+            bestMove = bestMoves[randomIndex];
+        }
+        
+        return bestMove;
+    }
+    
+    /**
+     * Get all possible ways the game can go, and return score
+     * 
+     * @param state
+     * @param depth
+     * @param isMax
+     * 
+     * @return 
+     */
+    private int minimax(char[][] state, int depth, boolean isMax) {
+        int score = evaluate(state);
+        
+        // Shorter wins are better
+        if (score == 10) {
+            return score - depth;
+        }
+        // Longer loses are better
+        if (score == -10) {
+            return score + depth;
+        }
+        // Draw?
+        if (isFull(state)) {
+            return 0;
+        }
+        
+        if (isMax) {
+            int best = -1000;
+            
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (state[i][j] == '_') {
+                        // Make move
+                        state[i][j] = computer.getPlayer();
+                        // Eval new state
+                        int recursiveMax = minimax(state, depth + 1, !isMax);
+                        best = Math.max(best, recursiveMax);
+                        state[i][j] = '_';
+                    }
+                }
+            }
+            return best;
+        } else {
+            int best = 1000;
+            
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (state[i][j] == '_') {
+                        // Make move
+                        state[i][j] = computer.getOpponent();
+                        // Eval new state
+                        int recursiveMax = minimax(state, depth + 1, !isMax);
+                        best = Math.min(best, recursiveMax);
+                        state[i][j] = '_';
+                    }
+                }
+            } 
+            return best;
+        }
+    }
+    
+    /**
+     * Evaluate given state
+     * 
+     * @param state
+     * 
+     * @return 
+     */
+    private int evaluate(char[][] state) {
+        // Check rows
+        for (int row = 0; row < 3; row++) {
+            if (state[row][0] == state[row][1] && state[row][0] == state[row][2]) {
+                if (state[row][0] == computer.getPlayer()) {
+                    return 10;
+                } else if (state[row][0] == computer.getOpponent()) {
+                    return -10;
+                }
+            }
+        }
+        
+        // Check columns
+        for (int col = 0; col < 3; col++) {
+            if (state[0][col] == state[1][col] && state[1][col] == state[2][col]) {
+                if (state[0][col] == computer.getPlayer()) {
+                    return 10;
+                } else if (state[0][col] == computer.getOpponent()) {
+                    return -10;
+                }
+            }
+        }
+        
+        // Check diagonals
+        if (state[0][0] == state[1][1] && state[1][1] == state[2][2]) {
+            if (state[0][0] == computer.getPlayer()) {
+                return 10;
+            } else if (state[0][0] == computer.getOpponent()) {
+                return -10;
+            }
+        }
+        // Check other diagonal
+        if (state[0][2] == state[1][1] && state[1][1] == state[2][0]) {
+            if (state[0][2] == computer.getPlayer()) {
+                return 10;
+            } else if (state[0][2] == computer.getOpponent()) {
+                return -10;
+            }
+        } 
+        return 0;
+    }
+    
+    /**
+     * Check to see if the board is full
+     * 
+     * @return 
+     */
+    private boolean isFull(char[][] state) 
+    {
+        for (char[] row : state) {
+            for (char value : row) {
+                // If no player, game still goes on!
+                if (value == '_') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

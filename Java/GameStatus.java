@@ -1,13 +1,6 @@
 /**
- * Copyright 104101110114121
+ * @author Henry Harris
  */
-
-/**
- * Class GameStatus
- * 
- * @author Henry Harris <henry@104101110114121.com>
- */
-public class GameStatus {
-	public String IN_PROGRESS = "IN_PROGRESS";
-	public String OVER = "OVER";
+public enum GameStatus {
+    IN_PROGRESS, OVER, BROKEN
 }
