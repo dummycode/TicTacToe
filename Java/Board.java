@@ -1,80 +1,84 @@
 /**
- * Copyright 104101110114121
- */
-
-/**
- * Class Board
- * 
- * @author Henry Harris <henry@104101110114121.com>
+ * @author Henry Harris
  */
 public class Board 
 {
-	char state[][] = {{'_', '_', '_'},{'_', '_', '_'},{'_', '_', '_'}};
-	
-	/**
-	 * Initialize a new board
-	 */
-	Board() 
-	{
-		// Do nothing
-	}
-	
-	/**
-	 * Get current state of board
-	 * 
-	 * @return char[][]
-	 */
-	char[][] getState()
-	{
-		return state;
-	}
-	
-	/**
-	 * Convert Board object to string
-	 */
-	public String toString()
-	{
-		String board = "";
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
-				board += " " + (state[i][j] == '_' ? " " : state[i][j]) + " " + (j == 2 ? "" : "|"); 
-			}
-			if (i < 2)
-				board += "\n_ _ _ _ _ _\n";
-		}
-		return board;
-	}
-	
-	/**
-	 * Move given player to given spot, returns true || false on success
-	 * 
-	 * @param player
-	 * @param row
-	 * @param column
-	 * 
-	 * @return boolean
-	 */
-	boolean move(char player, int row, int column) 
-	{
-		if(state[row][column] == '_') {
-			state[row][column] = player;
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	/**
-	 * Checks to see if board is completely filled
-	 * 
-	 * @return boolean
-	 */
-	boolean isFull() 
-	{
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-				if(state[i][j] == '_')
-					return false;
-		return true;
-	}
+    // Instance variable for the current state
+    private final char state[][] = {
+        {'_', '_', '_'}, 
+        {'_', '_', '_'}, 
+        {'_', '_', '_'}
+    };
+    
+    /**
+     * Get current state of board
+     * 
+     * @return 
+     */
+    public char[][] getState() 
+    {
+        char[][] copyOfState = new char[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                copyOfState[i][j] = state[i][j];
+            }
+        }
+        return copyOfState;
+    }
+    
+    /**
+     * Move a given player to a given spot, returns success
+     * 
+     * @param player
+     * @param row
+     * @param col
+     * 
+     * @return 
+     */
+    public boolean move(char player, int row, int col)
+    {
+        if (state[row][col] == '_') {
+            state[row][col] = player;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check to see if the board is full
+     * 
+     * @return 
+     */
+    public boolean isFull() 
+    {
+        for (char[] row : state) {
+            for (char value : row) {
+                if (value == '_') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Convert Board object to String
+     * 
+     * @return 
+     */
+    @Override
+    public String toString() 
+    {
+        String board = "";
+        for(int i = 0; i < state.length; i++) {
+            for (int j = 0; j < state[i].length; j++) {
+                board += " " + (state[i][j] == '_' ? " " : state[i][j]) + " " + (j == 2 ? "" : "|");
+            }
+            if (i < 2) {
+                board += "\n_ _ _ _ _ _\n";
+            }
+        }
+        return board;
+    }
 }
