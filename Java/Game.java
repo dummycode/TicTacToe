@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Game {
     private final Board board;
     private final Computer computer;
+    private final GUI gui;
     private char turn;
     private char winner = '_';
     private GameStatus status;
@@ -14,8 +15,9 @@ public class Game {
     /**
      * Game constructor
      */
-    public Game() 
+    public Game(GUI gui) 
     {
+        this.gui = gui;
         board = new Board();
         computer = new Computer('X');
         
@@ -89,7 +91,7 @@ public class Game {
             System.out.println("Error! Invalid spot.");
         } else {
             if (board.move(turn, row, col)) {
-                System.out.println("Moved.");
+                gui.drawMove(turn, row, col);
                 return true;
             } else {
                 System.out.println("Spot taken! Try again.");
@@ -121,22 +123,8 @@ public class Game {
      * @return
      */
     private int[] getHumanMove() {
-        int move[] = new int[2];
-        System.out.print("Enter move (x, y): ");
-        try {
-            Scanner scanner = new Scanner(System.in);
-            String[] parts = scanner.next().split(",");
-
-            int col = Integer.parseInt(parts[0]) - 1;
-            int row = Integer.parseInt(parts[1]) - 1;
-
-            move[0] = row;
-            move[1] = col;
-        } catch (Exception e) {
-            System.out.println("Invalid move syntax! Use (x, y) where x and y are 1..3");
-            return getHumanMove();
-        }
-        return move;
+        gui.setText("Your move");
+        return gui.getMove();
     }
     
     /**

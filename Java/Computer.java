@@ -21,6 +21,11 @@ public class Computer
      */
     public int[] getMove(char[][] state) 
     {
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException ie) {
+//            System.err.println("Could not think!");
+//        }
         // Call Brain's minimax to get best move
         int[] move = brain.getMove(state);
         return move;
