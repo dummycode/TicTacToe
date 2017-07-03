@@ -6,11 +6,12 @@ public class Main {
     {
         System.out.println("Welcome! Let's play Tic Tac Toe...");
         
-        Game game = new Game();
+        GUI gui = new GUI();
+        
+        Game game = new Game(gui);
         // While the game is being played, continously print state 
         // and ask for new move
         while(game.getStatus() == GameStatus.IN_PROGRESS) {
-            game.printState();
             game.getMove();
         }
         // Did the game break, or finish naturally
@@ -20,9 +21,9 @@ public class Main {
             char winner = game.getWinner();
 
             if (winner == '_') {
-                System.out.println("Draw, play again!");
+                gui.setText("Draw, play again!");
             } else {
-                System.out.println(winner + " won!");
+                gui.setText(winner + " won!");
             }
         } else {
             // Idk what the hell happened
