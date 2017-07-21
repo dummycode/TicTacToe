@@ -120,13 +120,13 @@ public class GUI extends Applet {
 
         // Logic for drawing an X
         if (symbol == 'X') {
-            g.setColor(Color.RED);
+            g.setColor(new Color(235, 88, 95));
             g.drawLine(xCoordinate - 25, yCoordinate - 25, xCoordinate + 25, yCoordinate + 25);
             g.drawLine(xCoordinate - 25, yCoordinate + 25, xCoordinate + 25, yCoordinate - 25);
         }
         // Logic for drawing an O
         else {
-            g.setColor(Color.BLUE);
+            g.setColor(new Color(77, 136, 255));
             g.drawOval(xCoordinate - 25, yCoordinate - 25, 50, 50);
         }
     }
