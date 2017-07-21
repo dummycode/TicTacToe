@@ -1,10 +1,9 @@
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * @author Henry Harris
  */
-public class Game {
+public class Game implements Runnable {
     private final Board board;
     private final Computer computer;
     private final GUI gui;
@@ -14,6 +13,7 @@ public class Game {
     
     /**
      * Game constructor
+     * @param gui
      */
     public Game(GUI gui) 
     {
@@ -30,9 +30,10 @@ public class Game {
      */
     public void getMove()
     {
-        int[] move = new int[2];
+        int[] move;
         
         if (turn == computer.getPlayer()) {
+            gui.setText("Computer's move...");
             move = computer.getMove(board.getState());
         } else {
             move = getHumanMove();
@@ -41,7 +42,6 @@ public class Game {
         boolean goodMove = move(move[0], move[1]);
         
         if (!goodMove && turn == computer.getPlayer()) {
-            System.out.println("Something broke and the computer made a bad move.");
             status = GameStatus.BROKEN;
         } 
         
@@ -55,14 +55,6 @@ public class Game {
             }
             nextTurn();
         }
-    }
-    
-    /**
-     * Print the current state of the game
-     */
-    public void printState() 
-    {
-        System.out.println(board);
     }
     
     /**
@@ -88,13 +80,11 @@ public class Game {
     private boolean move(int row, int col) 
     {
         if (row > 2 || row < 0 || col > 2 || col < 0) {
-            System.out.println("Error! Invalid spot.");
+            status = GameStatus.BROKEN;
         } else {
             if (board.move(turn, row, col)) {
                 gui.drawMove(turn, row, col);
                 return true;
-            } else {
-                System.out.println("Spot taken! Try again.");
             }
         }
         return false;
@@ -172,5 +162,12 @@ public class Game {
     private boolean isDraw() 
     {
         return board.isFull();
+    }
+
+    @Override
+    public void run() {
+        while(getStatus() == GameStatus.IN_PROGRESS) {
+            getMove();
+        }
     }
 }

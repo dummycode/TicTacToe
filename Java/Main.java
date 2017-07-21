@@ -4,20 +4,23 @@
 public class Main {
     public static void main(String args[]) 
     {
-        System.out.println("Welcome! Let's play Tic Tac Toe...");
-        
         GUI gui = new GUI();
+        
+        gui.setText("Welcome! Let's play!");
         
         Game game = new Game(gui);
         // While the game is being played, continously print state 
         // and ask for new move
-        while(game.getStatus() == GameStatus.IN_PROGRESS) {
-            game.getMove();
+        Thread t = new Thread(game);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            exitWithForce();
         }
+        
         // Did the game break, or finish naturally
         if (game.getStatus() != GameStatus.BROKEN) {
-            game.printState();
-
             char winner = game.getWinner();
 
             if (winner == '_') {
@@ -27,7 +30,16 @@ public class Main {
             }
         } else {
             // Idk what the hell happened
-            System.out.println("That was embarrassing...\nPlay again!");
+            gui.tellTheUserWeAreSorry();
+            exitWithForce();
         }
+    }
+    
+    /**
+     * DA fuck happened?
+     */
+    private static void exitWithForce() {
+        System.err.println("Something really fucked up... and we have no clue what.");
+        System.exit(0);
     }
 }

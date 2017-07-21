@@ -1,7 +1,6 @@
 import java.applet.Applet;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -15,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 
 /**
  * @author Henry Harris
@@ -29,10 +29,10 @@ public class GUI extends Applet {
     
     private int[] playersMove = new int[2];
     
-    private Panel header = new Panel();
+    private final Panel header = new Panel();
     
-    private Label title = new Label("Tic Tac Toe", Label.CENTER);
-    private Label message = new Label("Let's play!", Label.CENTER);
+    private final Label title = new Label("Tic Tac Toe", Label.CENTER);
+    private final Label message = new Label("Let's play!", Label.CENTER);
       
     /**
      * GUI constructor
@@ -40,7 +40,7 @@ public class GUI extends Applet {
     public GUI() 
     {
         f = new Frame("Tic Tac Toe");
-        f.setBackground(Color.BLACK);
+        f.setBackground(Color.WHITE);
         f.setLayout(null);
         f.setSize(400, 500);
         f.setResizable(false);
@@ -56,11 +56,11 @@ public class GUI extends Applet {
         header.setPreferredSize(new Dimension(400, 100));
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
         
-        title.setForeground(Color.WHITE);
+        title.setForeground(new Color(38, 40, 49));
         title.setFont(new Font("Default", Font.PLAIN, 36));
         header.add(title);
         
-        message.setForeground(Color.WHITE);
+        message.setForeground(new Color(120, 120, 120));
         message.setFont(new Font("Default", Font.PLAIN, 20));
         header.add(message);
         
@@ -130,6 +130,14 @@ public class GUI extends Applet {
             g.drawOval(xCoordinate - 25, yCoordinate - 25, 50, 50);
         }
     }
+    
+    /**
+     * Apologize because we can do nothing more. 
+     */
+    public void tellTheUserWeAreSorry() 
+    {
+        JOptionPane.showMessageDialog(null, "I fucked up bad, and I am sorry.");
+    }
   
     /**
      * Build the board
@@ -138,7 +146,7 @@ public class GUI extends Applet {
     { 
         Graphics2D g = (Graphics2D) f.getGraphics();
         g.setStroke(new BasicStroke(5));
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.drawLine(150, 150, 150, 450);
         g.drawLine(250, 150, 250, 450);
         g.drawLine(50, 250, 350, 250);
@@ -214,7 +222,6 @@ public class GUI extends Applet {
                     countDown.countDown();
                 }
                 else if (yCoordinate > 350 && yCoordinate < 450) {
-                    System.out.println("test");
                     playersMove[0] = 2;
                     playersMove[1] = 2;
                     countDown.countDown();
