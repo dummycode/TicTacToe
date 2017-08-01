@@ -3,8 +3,8 @@ import java.util.Random;
 /**
  * @author henry
  */
-public class Brain 
-{   
+public class Brain
+{
     // Computer the Brain represents
     final private Computer computer;
     final private Random random = new Random();
@@ -260,9 +260,9 @@ public class Brain
      * @return
      */
     private int[] canWin(char[][] state) {
-		/*
-		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
-		 */
+        /*
+         *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
+         */
         int rank = 0;
         int[] winningMove = new int[2];
 
@@ -271,7 +271,7 @@ public class Brain
             rank = 0;
             for(int i = 0; i < 3; i++) {
                 if (state[row][i] == computer.getPlayer()) {
-                 rank++;;
+                 rank++;
                 } else if (state[row][i] == computer.getOpponent()) {
                     rank--;
                 } else {
@@ -292,7 +292,6 @@ public class Brain
             for (int i = 0; i < 3; i++) {
                 if (state[i][col] == computer.getPlayer()) {
                     rank++;
-                    ;
                 } else if (state[i][col] == computer.getOpponent()) {
                     rank--;
                 } else {
@@ -311,7 +310,7 @@ public class Brain
         rank = 0;
         for(int i = 0; i < 3; i++) {
             if (state[i][i] == computer.getPlayer()) {
-                rank++;;
+                rank++;
             } else if(state[i][i] == computer.getOpponent()) {
                 rank--;
             } else {
@@ -329,7 +328,7 @@ public class Brain
         rank = 0;
         for(int i = 0; i < 3; i++) {
             if (state[2-i][i] == computer.getPlayer()) {
-                rank++;;
+                rank++;
             } else if(state[2-i][i] == computer.getOpponent()) {
                 rank--;
             } else {
