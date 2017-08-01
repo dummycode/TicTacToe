@@ -8,16 +8,65 @@ public class Brain
     // Computer the Brain represents
     final private Computer computer;
     final private Random random = new Random();
-    
+    private Difficulty difficulty;
+
     /**
      * Constructor
      * 
      * @param computer 
      */
-    public Brain(Computer computer) {
+    public Brain(Computer computer, Difficulty difficulty) {
         this.computer = computer;
+        this.difficulty = difficulty;
     }
-    
+
+    /**
+     * Get move for given difficulty
+     *
+     * @param state
+     *
+     * @return
+     */
+    public int[] getMove(char[][] state) {
+        switch(this.difficulty) {
+            case EASY:
+                return getEasyMove(state);
+            case MEDIUM:
+                return getMediumMove(state);
+            case HARD:
+                return getHardMove(state);
+            default:
+                return getHardMove(state);
+        }
+    }
+
+    /**
+     * Gets a random move, winning if possible
+     *
+     * @param state
+     *
+     * @return
+     */
+    private int[] getEasyMove(char[][] state) {
+        int[] winningMove = canWin(state);
+        if (winningMove != null) {
+            return winningMove;
+        }
+        return getRandomMove(state);
+    }
+
+    /**
+     * Gets either a random move or the best move, winning if possible
+     *
+     * @param state
+     *
+     * @return
+     */
+    private int[] getMediumMove(char[][] state) {
+        return random.nextInt(4) < 3 ? getHardMove(state) : getEasyMove(state);
+    }
+
+
     /**
      * Get the best move given a state
      * 
@@ -25,7 +74,8 @@ public class Brain
      * 
      * @return 
      */
-    public int[] getMove(char[][] state) {
+    private int[] getHardMove(char[][] state) {
+        System.out.println((canWin(state)));
         int[] bestMove = {-1, -1};
         int[][] bestMoves = new int[0][2];
         int bestVal = -1000;
@@ -200,5 +250,130 @@ public class Brain
             }
         }
         return true;
+    }
+
+    /**
+     * Brain logic to check to see if a computer can win
+     *
+     * @param state
+     *
+     * @return
+     */
+    private int[] canWin(char[][] state) {
+		/*
+		 *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
+		 */
+        int rank = 0;
+        int[] winningMove = new int[2];
+
+        // Rows
+        for(int row = 0; row < 3; row++) {
+            rank = 0;
+            for(int i = 0; i < 3; i++) {
+                if (state[row][i] == computer.getPlayer()) {
+                 rank++;;
+                } else if (state[row][i] == computer.getOpponent()) {
+                    rank--;
+                } else {
+                    // Store possible winning move
+                    winningMove[0] = row;
+                    winningMove[1] = i;
+                }
+            }
+            // If we hold 2 out of 3, and last one is empty, we can win this shit
+            if (rank == 2) {
+                return winningMove;
+            }
+        }
+
+        // Columns
+        for(int col = 0; col < 3; col++) {
+            rank = 0;
+            for (int i = 0; i < 3; i++) {
+                if (state[i][col] == computer.getPlayer()) {
+                    rank++;
+                    ;
+                } else if (state[i][col] == computer.getOpponent()) {
+                    rank--;
+                } else {
+                    // Store possible winning move
+                    winningMove[0] = i;
+                    winningMove[1] = col;
+                }
+            }
+            // If we hold 2 out of 3, and last one is empty, we can win this shit
+            if (rank == 2) {
+                return winningMove;
+            }
+        }
+
+        // Diagonal
+        rank = 0;
+        for(int i = 0; i < 3; i++) {
+            if (state[i][i] == computer.getPlayer()) {
+                rank++;;
+            } else if(state[i][i] == computer.getOpponent()) {
+                rank--;
+            } else {
+                // Store possible winning move
+                winningMove[0] = i;
+                winningMove[1] = i;
+            }
+        }
+        // If we hold 2 out of 3, and the last one is empty, we can win this shit
+        if(rank == 2) {
+            return winningMove;
+        }
+
+        // Other diagonal
+        rank = 0;
+        for(int i = 0; i < 3; i++) {
+            if (state[2-i][i] == computer.getPlayer()) {
+                rank++;;
+            } else if(state[2-i][i] == computer.getOpponent()) {
+                rank--;
+            } else {
+                // Store possible winning move
+                winningMove[0] = 2 - i;
+                winningMove[1] = i;
+            }
+        }
+        // If we hold 2 out of 3, and the last one is empty, we can win this shit
+        if (rank == 2) {
+            return winningMove;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a random move out of empty moves
+     *
+     * @param state
+     *
+     * @return
+     */
+    private int[] getRandomMove(char[][] state) {
+        int[][] possibleMoves = new int[0][2];
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                if (state[x][y] == '_') {
+                    int[][] temp = new int[possibleMoves.length + 1][2];
+                    for (int x2 = 0; x2 < possibleMoves.length; x2++) {
+                        for (int y2 = 0; y2 < 2; y2++) {
+                            temp[x2][y2] = possibleMoves[x2][y2];
+                        }
+                    }
+                    temp[possibleMoves.length][0] = x;
+                    temp[possibleMoves.length][1] = y;
+                    possibleMoves = temp;
+                }
+            }
+        }
+        if (possibleMoves.length > 1) {
+            int randomIndex = random.nextInt(possibleMoves.length - 1);
+            return possibleMoves[randomIndex];
+        }
+        return possibleMoves[0];
     }
 }
