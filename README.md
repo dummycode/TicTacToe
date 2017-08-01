@@ -1,7 +1,13 @@
-A Tic Tac Toe engine, try and beat me...
-==
+Tic Tac Toe
+=
+A single player Tic Tac Toe game written in Java (for now, hoping to write in Haskell at a later date), where the computer is your opponent. Download the [.jar](https://github.com/dummycode/TicTacToe/Java/out/TicTacToe.jar) and run using `java -jar TicTacToe.jar`.
+### 3 Different Modes
+##### Easy
+The computer selects a random move, winning when possible.
 
-*Hint: It's impossible* ;) 
+##### Medium
+The computer selects the move it would make on hard 75% of the time and the other 25% of the time it selects the move it would make on easy.
 
-Since this AI uses a [minimax algorthim](https://en.wikipedia.org/wiki/Minimax), the best you can do is draw.
+##### Hard
+The computer selects the best possible move using a [minimax algorithm](https://en.wikipedia.org/wiki/Minimax). I will pay you **$100** if you beat the computer on hard mode, as it is impossible (as long as my code doesn't betray me). The best you can do is draw.
 
