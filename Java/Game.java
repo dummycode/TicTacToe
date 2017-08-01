@@ -19,7 +19,7 @@ public class Game implements Runnable {
     {
         this.gui = gui;
         board = new Board();
-        computer = new Computer('X');
+        computer = new Computer('X', Difficulty.EASY);
         
         turn = whoGoesFirst();
         status = GameStatus.IN_PROGRESS;

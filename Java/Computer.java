@@ -6,9 +6,9 @@ public class Computer
     final private Brain brain;
     final private char player;
     
-    public Computer(char player) 
+    public Computer(char player, Difficulty difficulty)
     {
-        brain = new Brain(this);
+        brain = new Brain(this, difficulty);
         this.player = player;
     }
     
