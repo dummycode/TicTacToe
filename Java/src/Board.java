@@ -76,7 +76,7 @@ public class Board
                 board += " " + (state[i][j] == '_' ? " " : state[i][j]) + " " + (j == 2 ? "" : "|");
             }
             if (i < 2) {
-                board += "\n_ _ _ _ _ _\n";
+                board += "\n— — — — — —\n";
             }
         }
         return board;
