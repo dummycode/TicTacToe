@@ -37,7 +37,7 @@ public class GUI extends Applet {
     /**
      * GUI constructor
      */
-    public GUI() 
+    GUI()
     {
         f = new Frame("Tic Tac Toe");
         f.setBackground(Color.WHITE);

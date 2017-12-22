@@ -13,22 +13,30 @@ public class Game implements Runnable {
     
     /**
      * Game constructor
+     *
      * @param gui
      */
     public Game(GUI gui) 
     {
         this.gui = gui;
         board = new Board();
-        computer = new Computer('X', Difficulty.EASY);
+        computer = new Computer('X', Difficulty.MEDIUM);
         
         turn = whoGoesFirst();
         status = GameStatus.IN_PROGRESS;
+    }
+
+    @Override
+    public void run() {
+        while(getStatus() == GameStatus.IN_PROGRESS) {
+            getMove();
+        }
     }
     
     /**
      * Get a move
      */
-    public void getMove()
+    private void getMove()
     {
         int[] move;
         
@@ -62,7 +70,7 @@ public class Game implements Runnable {
      * 
      * @return 
      */
-    public GameStatus getStatus() 
+    public GameStatus getStatus()
     {
         return status;
     }
@@ -72,11 +80,19 @@ public class Game implements Runnable {
 
      * @return 
      */
-    public char getWinner() 
+    public char getWinner()
     {
         return winner;
     }
-    
+
+    /**
+     * Move to a given spot
+     *
+     * @param row
+     * @param col
+     *
+     * @return
+     */
     private boolean move(int row, int col) 
     {
         if (row > 2 || row < 0 || col > 2 || col < 0) {
@@ -162,12 +178,5 @@ public class Game implements Runnable {
     private boolean isDraw() 
     {
         return board.isFull();
-    }
-
-    @Override
-    public void run() {
-        while(getStatus() == GameStatus.IN_PROGRESS) {
-            getMove();
-        }
     }
 }

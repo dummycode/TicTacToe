@@ -15,13 +15,13 @@ public class Brain
      * 
      * @param computer 
      */
-    public Brain(Computer computer, Difficulty difficulty) {
+    Brain(Computer computer, Difficulty difficulty) {
         this.computer = computer;
         this.difficulty = difficulty;
     }
 
     /**
-     * Get move for given difficulty
+     * Get move
      *
      * @param state
      *
@@ -75,7 +75,6 @@ public class Brain
      * @return 
      */
     private int[] getHardMove(char[][] state) {
-        System.out.println((canWin(state)));
         int[] bestMove = {-1, -1};
         int[][] bestMoves = new int[0][2];
         int bestVal = -1000;
@@ -159,7 +158,7 @@ public class Brain
                         // Make move
                         state[i][j] = computer.getPlayer();
                         // Eval new state
-                        int recursiveMax = minimax(state, depth + 1, !isMax);
+                        int recursiveMax = minimax(state, depth + 1, false);
                         best = Math.max(best, recursiveMax);
                         state[i][j] = '_';
                     }
@@ -175,7 +174,7 @@ public class Brain
                         // Make move
                         state[i][j] = computer.getOpponent();
                         // Eval new state
-                        int recursiveMax = minimax(state, depth + 1, !isMax);
+                        int recursiveMax = minimax(state, depth + 1, true);
                         best = Math.min(best, recursiveMax);
                         state[i][j] = '_';
                     }
@@ -263,7 +262,7 @@ public class Brain
         /*
          *  Cycle through rows, columns, and diagonals to see if we have 2 out of 3 for any of them
          */
-        int rank = 0;
+        int rank;
         int[] winningMove = new int[2];
 
         // Rows

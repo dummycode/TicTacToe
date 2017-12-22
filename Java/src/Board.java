@@ -70,15 +70,22 @@ public class Board
     @Override
     public String toString() 
     {
-        String board = "";
+        StringBuilder board = new StringBuilder("");
         for(int i = 0; i < state.length; i++) {
             for (int j = 0; j < state[i].length; j++) {
-                board += " " + (state[i][j] == '_' ? " " : state[i][j]) + " " + (j == 2 ? "" : "|");
+                board.append(" ");
+                if (state[i][j] == '_') {
+                    board.append(" ");
+                } else {
+                    board.append(state[i][j]);
+                    board.append(" ");
+                    board.append(j == 2 ? "" : "|");
+                }
             }
             if (i < 2) {
-                board += "\n— — — — — —\n";
+                board.append("\n— — — — — —\n");
             }
         }
-        return board;
+        return board.toString();
     }
 }
