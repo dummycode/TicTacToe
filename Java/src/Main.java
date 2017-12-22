@@ -10,16 +10,14 @@ public class Main {
         gui.setText("Welcome! Let's play!");
         
         Game game = new Game(gui);
-        // While the game is being played, continuously print state
-        // and ask for new move
+
+        // Run the game on its own thread
         Thread t = new Thread(game);
 
         // Handle exceptions
-        Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
-            public void uncaughtException(Thread th, Throwable ex) {
-                System.out.println(ex.getMessage());
-                exitWithForce();
-            }
+        Thread.UncaughtExceptionHandler h = (th, ex) -> {
+            System.out.println(ex.getMessage());
+            exitWithForce();
         };
 
         t.start();

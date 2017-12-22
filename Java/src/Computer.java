@@ -6,7 +6,7 @@ public class Computer
     final private Brain brain;
     final private char player;
     
-    public Computer(char player, Difficulty difficulty)
+    Computer(char player, Difficulty difficulty)
     {
         brain = new Brain(this, difficulty);
         this.player = player;
@@ -27,9 +27,8 @@ public class Computer
         } catch (InterruptedException ie) {
             System.err.println("Could not think!");
         }
-        // Call Brain's minimax to get best move
-        int[] move = brain.getMove(state);
-        return move;
+        // Get brain's move
+        return brain.getMove(state);
     }
     
     /**
